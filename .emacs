@@ -1,11 +1,6 @@
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;disable auto indenting on paste
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
-
 (electric-indent-mode -1)
 ;disable backup
 (setq backup-inhibited t)
@@ -17,32 +12,45 @@
 (setq-default fill-column 79)
 ;enable column number mode
 (setq column-number-mode t)
+;set javascript indent to 2 spaces
+(setq js-indent-level 2)
 
-;; elpa
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; list the packages you want
+(setq package-list '(column-enforce-mode
+		     go-mode))
+
+; list the repositories containing them
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
-;; M-x package-install
-;; go-mode
-;; M-x go-mode
 
-;; M-x package-install
-;; column-enforce-mode
-;; M-x column-enforce-mode
+; activate all the packages (in particular autoloads)
+(package-initialize)
 
-(put 'upcase-region 'disabled nil)
+; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
 
-; set javascript indent to 2 spaces
-(setq js-indent-level 2)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (column-enforce-mode go-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; column-enforce-mode
+; enable for all programming modes
+(add-hook 'prog-mode-hook 'column-enforce-mode)
+; set column width
+(setq column-enforce-column 79)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Notes
+; (put 'upcase-region 'disabled nil)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Anything below here has been auto-added by install scripts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
