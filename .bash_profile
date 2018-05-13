@@ -18,6 +18,13 @@ alias emacs='emacs -nw'
 alias gits='gits --no-master'
 alias k=kubectl
 
+if [ "$system_type" = "Darwin" ]; then
+  # Enable OSX color
+  alias ls='ls -G'
+else
+  alias less='less -R'
+fi
+
 # for direnv; only if interactive shell and direnv is installed
 if [[ -n ${PS1:-''} ]] && silent which direnv; then
     eval "$(direnv hook bash)"
@@ -30,6 +37,7 @@ fi
 
 #####################################################################
 # SSH-AGENT
+
 if [ "$system_type" = "Darwin" ]; then
   # Dev machine (OSX)
   # Ensure ONLY one ssh-agent is running, or connect to existing one, and add key
@@ -38,7 +46,7 @@ if [ "$system_type" = "Darwin" ]; then
       ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
   fi
   export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-  ssh-add -l 2>&1| grep "The agent has no identities" &>/dev/null && ssh-add &>/dev/null
+  ssh-add -l 2>&1| grep "The agent has no identities" &>/dev/null && silent ssh-add
 else
   # VM Guest machine (Vagrant Linux)
   # Enable re-attaching screen sessions with ssh-agent support
