@@ -2,10 +2,6 @@
 # Globals
 system_type=$(uname -s)
 
-silent() {
-    "$@" 2>&1 > /dev/null
-}
-
 # aliases
 alias emacs='emacs -nw'
 alias gits='gits --no-master'
@@ -16,16 +12,6 @@ if [ "$system_type" = "Darwin" ]; then
   alias ls='ls -G'
 else
   alias less='less -R'
-fi
-
-# for direnv; only if interactive shell and direnv is installed
-if [[ -n ${PS1:-''} ]] && silent which direnv; then
-    eval "$(direnv hook bash)"
-fi
-
-# for hub alias; only if interactive shell and hub is installed
-if [[ -n ${PS1:-''} ]] && silent which hub; then
-    eval "$(hub alias -s)"
 fi
 
 #####################################################################
@@ -39,7 +25,7 @@ if [ "$system_type" = "Darwin" ]; then
       ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock
   fi
   export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock
-  ssh-add -l 2>&1| grep "The agent has no identities" &>/dev/null && silent ssh-add
+  ssh-add -l 2>&1| grep "The agent has no identities" &>/dev/null && ssh-add &>/dev/null
 else
   # VM Guest machine (Vagrant Linux)
   # Enable re-attaching screen sessions with ssh-agent support
@@ -93,6 +79,20 @@ done
 # for golang
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:
+
+
+###############################################################################
+# Load hooks
+
+# for direnv; only if interactive shell and direnv is installed
+if [[ -n ${PS1:-''} ]] && which direnv &>/dev/null; then
+    eval "$(direnv hook bash)"
+fi
+
+# for hub alias; only if interactive shell and hub is installed
+if [[ -n ${PS1:-''} ]] && which hub &>/dev/null; then
+    eval "$(hub alias -s)"
+fi
 
 #####################################################################
 # Keybase extra configs
