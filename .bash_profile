@@ -6,9 +6,6 @@ silent() {
     "$@" 2>&1 > /dev/null
 }
 
-# for emacs
-export EDITOR=emacs
-
 # for golang
 export GOPATH=~/go
 export PATH=$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:$PATH
