@@ -6,10 +6,6 @@ silent() {
     "$@" 2>&1 > /dev/null
 }
 
-# for golang
-export GOPATH=~/go
-export PATH=$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:$PATH
-
 # aliases
 alias emacs='emacs -nw'
 alias gits='gits --no-master'
@@ -68,6 +64,13 @@ potential_bin_dirs=( \
   # for brew \
   /usr/local/bin \
   /usr/local/sbin \
+  # for golang \
+  /usr/local/opt/go/libexec/bin \
+  /usr/local/go/bin \
+  # for protocol buffers \
+  /usr/local/protoc/bin \
+  # for terraform
+  /usr/local/terraform/bin \
   # for brew gnu-sed (required for kubernetes build) \
   /usr/local/opt/gnu-sed/libexec/gnubin \
   # for brew gnu-tar (required for kubernetes build) \
@@ -78,21 +81,18 @@ potential_bin_dirs=( \
   /usr/local/Cellar/openssl/1.0.2l/bin \
   # for curl \
   /usr/local/Cellar/curl/7.54.1/bin \
-  # for golang \
-  /usr/local/opt/go/libexec/bin \
-  /usr/local/go/bin \
-  # for protocol buffers \
-  /usr/local/protoc/bin \
-  # for terraform
-  /usr/local/terraform/bin \
   # for gcloud, kubectl
   /usr/local/google-cloud-sdk/bin \
 )
 for potential_bin_dir in "${potential_bin_dirs[@]}"; do
   if [[ -d "$potential_bin_dir" ]] && !(echo $PATH | grep "$potential_bin_dir" &>/dev/null); then
-    export PATH=$potential_bin_dir:$PATH
+    export PATH=$PATH:$potential_bin_dir
   fi
 done
+
+# for golang
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:
 
 #####################################################################
 # Keybase extra configs
