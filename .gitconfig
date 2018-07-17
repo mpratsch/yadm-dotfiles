@@ -1,10 +1,25 @@
-[alias]
-	lga = log --graph --oneline --all --decorate
-	lg = log --graph --all --pretty=format:'%C(bold)%h%Creset -%C(auto)%d%Creset %s %C(green dim)(%cr)%Creset %C(ul)<%an>'
-	subscribe-pulls = !"f() { REMOTE=${1:-origin}; if ! git config --local --get-all remote.${REMOTE}.fetch | grep -q refs/pull; then echo 'subscribing...' 2>&1; git config --local --add remote.${REMOTE}.fetch '+refs/pull/*/head:refs/remotes/pr/*'; fi; }; f"
-[push]
-	default = simple
+[user]
+  email = mpratsch@cisco.com
+  name = Martina Rath
 [core]
-	excludesfile = ~/.gitignore
+  excludesfile = ~/.gitignore
+[push]
+  default = simple
 [color]
-	ui = auto
+  ui = true
+[color "diff"]
+  meta = blue black bold
+[alias]
+        br = branch
+        co = checkout
+        ci = commit
+        st = status
+        fetchall = fetch --all -p
+        update = rebase upstream/master
+        hist = log --pretty=format:\"%h %ad | %s [%an]\" --graph --date=short
+        type = cat-file -t
+        dump = cat-file -p
+        glame = "!f(){ git grep -n \"$@\" | while IFS=: read i j k; do git --no-pager blame -L $j,$j $i; done ;}; f"
+        lga = log --graph --oneline --all --decorate
+        lg = log --graph --all --pretty=format:'%C(bold)%h%Creset -%C(auto)%d%Creset %s %C(green dim)(%cr)%Creset %C(ul)<%an>'
+        subscribe-pulls = !"f() { REMOTE=${1:-origin}; if ! git config --local --get-all remote.${REMOTE}.fetch | grep -q refs/pull; then echo 'subscribing...' 2>&1; git config --local --add remote.${REMOTE}.fetch '+refs/pull/*/head:refs/remotes/pr/*'; fi; }; f"

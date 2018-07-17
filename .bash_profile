@@ -6,6 +6,8 @@ system_type=$(uname -s)
 alias emacs='emacs -nw'
 alias gits='gits --no-master'
 alias k=kubectl
+alias vi=vim
+export EDITOR=vim
 
 if [ "$system_type" = "Darwin" ]; then
   # Enable OSX color
@@ -81,6 +83,9 @@ done
 export GOPATH=/go
 export PATH=$PATH:$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:
 
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
 
 ###############################################################################
 # Load hooks
@@ -88,6 +93,7 @@ export PATH=$PATH:$GOPATH/bin:./bin/linux_amd64/:./vendor/bin:
 # for direnv; only if interactive shell and direnv is installed
 if [[ -n ${PS1:-''} ]] && which direnv &>/dev/null; then
     eval "$(direnv hook bash)"
+    export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\]$ "
 fi
 
 # for hub alias; only if interactive shell and hub is installed
